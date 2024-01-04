@@ -1,7 +1,6 @@
 package com.example.ecommerce.member.service;
 
 import com.example.ecommerce.member.model.request.PostAuthenticateReq;
-import com.example.ecommerce.member.model.request.PostEmailConfirmReq;
 import com.example.ecommerce.member.model.request.PostSellerSignUpReq;
 import com.example.ecommerce.member.model.request.PostSignUpReq;
 import com.example.ecommerce.member.model.entity.Member;

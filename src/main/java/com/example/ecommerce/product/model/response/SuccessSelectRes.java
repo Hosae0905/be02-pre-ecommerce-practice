@@ -1,18 +1,16 @@
-package com.example.ecommerce.product.model;
+package com.example.ecommerce.product.model.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Builder
-public class SuccessResponse {
+public class SuccessSelectRes {
     private Boolean isSuccess;
     private Integer code;
     private String message;
-    private Map<String, Object> result;
+    private GetProductInfoRes result;
     private Boolean success;
 }

@@ -33,6 +33,9 @@ public class SecurityConfig {
             http.csrf().disable()
                     .authorizeRequests()
                     .antMatchers("/member/*").permitAll()
+                    .antMatchers("/product/*").permitAll()
+                    .antMatchers("/product/create").hasRole("SELLER")
+                    .antMatchers("/product/display").hasRole("SELLER")
                     .anyRequest().authenticated();
             http.formLogin().disable();
             http.addFilterBefore(new JwtFilter(memberService, key), UsernamePasswordAuthenticationFilter.class);

@@ -3,10 +3,8 @@ package com.example.ecommerce.product.model.entity;
 import com.example.ecommerce.product.model.request.PostProductReq;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
@@ -26,6 +24,9 @@ public class Product {
     private String deliveryType;
     private String isTodayDeal;
     private String contents;
+
+    @OneToMany(mappedBy = "product")
+    private List<Image> imageList;
 
     public static Product dtoToEntity(PostProductReq postProductReq) {
         return Product.builder()
