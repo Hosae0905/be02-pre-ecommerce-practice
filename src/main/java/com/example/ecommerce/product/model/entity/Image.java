@@ -20,4 +20,11 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "Product_id")
     private Product product;
+
+    public static Image buildEntity(String saveFile, Long idx) {
+        return Image.builder()
+                .image(saveFile)
+                .product(Product.builder().id(idx).build())
+                .build();
+    }
 }

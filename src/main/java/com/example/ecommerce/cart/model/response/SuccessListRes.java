@@ -15,4 +15,14 @@ public class SuccessListRes {
     private String message;
     private List<GetCartListRes> result;
     private Boolean success;
+
+    public static SuccessListRes buildDto(List<GetCartListRes> cartList) {
+        return SuccessListRes.builder()
+                .isSuccess(true)
+                .code(1000)
+                .message("요청 성공")
+                .result(cartList)
+                .success(true)
+                .build();
+    }
 }

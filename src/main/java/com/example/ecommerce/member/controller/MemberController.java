@@ -1,7 +1,6 @@
 package com.example.ecommerce.member.controller;
 
 import com.example.ecommerce.member.model.request.PostAuthenticateReq;
-import com.example.ecommerce.member.model.request.PostEmailConfirmReq;
 import com.example.ecommerce.member.model.request.PostSellerSignUpReq;
 import com.example.ecommerce.member.model.request.PostSignUpReq;
 import com.example.ecommerce.member.model.response.PostSignUpRes;
@@ -25,7 +24,6 @@ public class MemberController {
     public ResponseEntity<Object> signUp(@RequestBody PostSignUpReq postSignUpReq) {
         PostSignUpRes postSignUpRes = memberService.signUp(postSignUpReq);
         if (postSignUpRes != null) {
-            memberService.sendEmail(postSignUpRes);
             return ResponseEntity.ok().body(memberService.successRes(postSignUpRes));
         } else {
             return ResponseEntity.badRequest().body("error");

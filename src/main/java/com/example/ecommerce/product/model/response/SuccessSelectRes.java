@@ -13,4 +13,14 @@ public class SuccessSelectRes {
     private String message;
     private GetProductInfoRes result;
     private Boolean success;
+
+    public static SuccessSelectRes successDto(GetProductInfoRes getProductInfoRes) {
+        return SuccessSelectRes.builder()
+                .isSuccess(true)
+                .code(1000)
+                .result(getProductInfoRes)
+                .message("요청 성공")
+                .success(true)
+                .build();
+    }
 }

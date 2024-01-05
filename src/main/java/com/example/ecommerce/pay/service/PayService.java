@@ -49,12 +49,7 @@ public class PayService {
                     cartRepository.deleteAllByMember(Member.builder().id(id).build());
                 }
 
-                return SuccessPayRes.builder()
-                        .isSuccess(true)
-                        .code(1000)
-                        .message(String.valueOf(response.getResponse().getAmount()))
-                        .build();
-
+                return SuccessPayRes.buildDto(String.valueOf(response.getResponse().getAmount()));
             } catch (IamportResponseException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

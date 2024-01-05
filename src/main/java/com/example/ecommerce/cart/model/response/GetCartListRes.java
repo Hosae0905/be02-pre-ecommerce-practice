@@ -1,5 +1,7 @@
 package com.example.ecommerce.cart.model.response;
 
+import com.example.ecommerce.cart.model.entity.Cart;
+import com.example.ecommerce.product.model.entity.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,19 +9,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-/**
- *              "idx": 4,			// 장바구니의 IDX
- *             "productIdx": 1,
- *             "brandIdx": 7,
- *             "amount": 1,
- *             "name": "상품01",
- *             "price": 10000,
- *             "salePrice": 9000,
- *             "deliveryType": "무료",
- *             "isTodayDeal": "n",
- *             "filename": "common.jpeg"
- */
-
 public class GetCartListRes {
     private Long idx;
     private Long productIdx;
@@ -31,4 +20,19 @@ public class GetCartListRes {
     private String deliveryType;
     private String isTodayDeal;
     private String filename;
+
+    public static GetCartListRes buildDto(Cart cart, Product product) {
+        return GetCartListRes.builder()
+                .idx(cart.getId())
+                .productIdx(product.getId())
+                .brandIdx(1)
+                .amount(cart.getAmount())
+                .name(product.getName())
+                .price(product.getPrice())
+                .salePrice(product.getSalePrice())
+                .deliveryType(product.getDeliveryType())
+                .isTodayDeal(product.getIsTodayDeal())
+                .filename(product.getImageList().get(0).getImage())
+                .build();
+    }
 }

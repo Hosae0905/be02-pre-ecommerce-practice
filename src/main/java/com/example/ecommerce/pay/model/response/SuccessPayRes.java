@@ -15,4 +15,12 @@ public class SuccessPayRes {
     private Integer code;
     private String message;
     private Boolean success;
+
+    public static SuccessPayRes buildDto(String message) {
+        return SuccessPayRes.builder()
+                .isSuccess(true)
+                .code(1000)
+                .message(message)
+                .build();
+    }
 }

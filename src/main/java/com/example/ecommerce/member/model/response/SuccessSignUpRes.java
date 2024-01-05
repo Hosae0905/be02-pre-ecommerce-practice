@@ -1,26 +1,28 @@
-package com.example.ecommerce.product.model.response;
-
+package com.example.ecommerce.member.model.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
+@Builder
 @Getter
 @Setter
-@Builder
-public class SuccessCreateRes {
+public class SuccessSignUpRes {
     private Boolean isSuccess;
     private Integer code;
     private String message;
-    private PostCreateRes result;
+    private Map<String, Object> result;
     private Boolean success;
 
-    public static SuccessCreateRes successDto(Long idx) {
-        return SuccessCreateRes.builder()
+    public static SuccessSignUpRes buildDto(Map<String, Object> result) {
+        return SuccessSignUpRes.builder()
                 .isSuccess(true)
                 .code(1000)
                 .message("요청 성공")
-                .result(PostCreateRes.builder().idx(idx).build())
+                .result(result)
+                .success(true)
                 .build();
     }
 }

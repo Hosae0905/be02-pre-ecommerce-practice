@@ -5,7 +5,7 @@ import com.example.ecommerce.member.model.request.PostSellerSignUpReq;
 import com.example.ecommerce.member.model.request.PostSignUpReq;
 import com.example.ecommerce.member.model.entity.Member;
 import com.example.ecommerce.member.model.response.PostSignUpRes;
-import com.example.ecommerce.member.model.response.SignUpSuccessRes;
+import com.example.ecommerce.member.model.response.SuccessSignUpRes;
 import com.example.ecommerce.member.repository.MemberRepository;
 import com.example.ecommerce.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,6 @@ public class MemberService implements UserDetailsService {
         Optional<Member> member = memberRepository.findByEmail(postAuthenticateReq.getUsername());
         if (member.isPresent()) {
             if(passwordEncoder.matches(postAuthenticateReq.getPassword(), member.get().getPassword())) {
-
                 Map<String, String> response = new HashMap<>();
                 response.put("token", JwtUtil.generateAccessToken(member.get(), key, expiredTimeMs));
                 return response;
@@ -64,27 +63,17 @@ public class MemberService implements UserDetailsService {
         postSignUpReq.setPassword(passwordEncoder.encode(postSignUpReq.getPassword()));
         Member member = memberRepository.save(Member.dtoToEntity(postSignUpReq));
         String accessToken = JwtUtil.generateAccessToken(member, key, expiredTimeMs);
+        PostSignUpRes postSignUpRes = PostSignUpRes.buildDto(member, accessToken);
+        sendEmail(postSignUpRes);
 
-        return PostSignUpRes.builder()
-                .id(member.getId())
-                .email(member.getEmail())
-                .accessToken(accessToken)
-                .build();
+        return postSignUpRes;
     }
 
-    public SignUpSuccessRes successRes(PostSignUpRes postSignUpRes) {
-
+    public SuccessSignUpRes successRes(PostSignUpRes postSignUpRes) {
         Map<String, Object> result = new HashMap<>();
         result.put("idx", postSignUpRes.getId());
         result.put("status", 0);
-
-        return SignUpSuccessRes.builder()
-                .isSuccess(true)
-                .code(1000)
-                .message("요청 성공")
-                .result(result)
-                .success(true)
-                .build();
+        return SuccessSignUpRes.buildDto(result);
     }
 
     public void sellerSignUp(PostSellerSignUpReq postSellerSignUpReq) {

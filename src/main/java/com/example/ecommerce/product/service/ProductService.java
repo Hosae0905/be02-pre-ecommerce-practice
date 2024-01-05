@@ -20,22 +20,15 @@ public class ProductService {
     private final FileSaveService fileSaveService;
     private final ImageRepository imageRepository;
 
-    // TODO: 상품 등록
     public PostCreateRes create(PostProductReq postProductReq) {
-        Product product = productRepository.save(Product.dtoToEntity(postProductReq));
-
-        return PostCreateRes.builder().idx(product.getId()).build();
+        return PostCreateRes.buildDto(productRepository.save(Product.dtoToEntity(postProductReq)));
     }
 
-    // TODO: 상품 이미지 저장
     public SuccessCreateRes saveImage(MultipartFile[] uploadFiles, Long idx) {
         List<Image> images = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
             String saveFile = fileSaveService.saveFile(uploadFile);
-            Image image = imageRepository.save(Image.builder()
-                    .image(saveFile)
-                    .product(Product.builder().id(idx).build())
-                    .build());
+            Image image = imageRepository.save(Image.buildEntity(saveFile, idx));
             images.add(image);
         }
 
@@ -46,48 +39,24 @@ public class ProductService {
             productRepository.save(product.get());
         }
 
-        return SuccessCreateRes.builder()
-                .isSuccess(true)
-                .code(1000)
-                .message("요청 성공")
-                .result(PostCreateRes.builder().idx(idx).build())
-                .build();
+        return SuccessCreateRes.successDto(idx);
     }
 
-    // TODO: 상품 목록 조회(전체)
     public SuccessListRes list() {
         List<Product> products = productRepository.findAll();
         List<GetProductListRes> productList = new ArrayList<>();
 
         if (products != null) {
             for (Product product : products) {
-                productList.add(GetProductListRes.builder()
-                        .idx(product.getId())
-                        .name(product.getName())
-                        .brandIdx(1)
-                        .categoryIdx(1L)
-                        .price(product.getPrice())
-                        .salePrice(product.getSalePrice())
-                        .deliveryType(product.getDeliveryType())
-                        .isTodayDeal(product.getIsTodayDeal())
-                        .filename(product.getImageList().get(0).getImage())
-                        .like_check(false)
-                        .build());
+                productList.add(GetProductListRes.entityToDto(product));
             }
 
-            return SuccessListRes.builder()
-                    .isSuccess(true)
-                    .code(1000)
-                    .message("요청 성공")
-                    .result(productList)
-                    .success(true)
-                    .build();
+            return SuccessListRes.successDto(productList);
         } else {
             return null;
         }
     }
 
-    // TODO: 상품 목록 조회(하나만)
     public SuccessSelectRes selectProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
 
@@ -97,27 +66,7 @@ public class ProductService {
             for (Image image : productInfo.getImageList()) {
                 images = image.getImage() + ",";
             }
-            GetProductInfoRes getProductInfoRes = GetProductInfoRes.builder()
-                    .idx(productInfo.getId())
-                    .name(productInfo.getName())
-                    .brandIdx(1)
-                    .categoryIdx(1L)
-                    .price(productInfo.getPrice())
-                    .salePrice(productInfo.getSalePrice())
-                    .deliveryType(productInfo.getDeliveryType())
-                    .isTodayDeal(productInfo.getIsTodayDeal())
-                    .contents(productInfo.getContents())
-                    .filename(images)
-                    .likeCount(0)
-                    .build();
-
-            return SuccessSelectRes.builder()
-                    .isSuccess(true)
-                    .code(1000)
-                    .result(getProductInfoRes)
-                    .message("요청 성공")
-                    .success(true)
-                    .build();
+            return SuccessSelectRes.successDto(GetProductInfoRes.createDto(productInfo, images));
         } else {
             return null;
         }

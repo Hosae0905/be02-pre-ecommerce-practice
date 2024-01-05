@@ -33,56 +33,29 @@ public class CartService {
 
     // TODO: 장바구니 추가
     public void cartIn(GetCartInReq getCartInReq, String email) {
-
         Optional<Member> member = memberRepository.findByEmail(email);
 
         if (member.isPresent()) {
-            cartRepository.save(Cart.builder()
-                    .amount(getCartInReq.getAmount())
-                    .member(Member.builder().id(member.get().getId()).build())
-                    .product(Product.builder().id(getCartInReq.getProductIdx()).build())
-                    .build());
+            cartRepository.save(Cart.dtoToEntity(getCartInReq, member.get()));
         }
     }
 
     // TODO: 장바구니에 담긴 목록
     public SuccessListRes cartList(String token) {
-        log.info("token {}", token);
-
         if (token != null && token.startsWith("Bearer ")) {
             token = token.split(" ")[1];
         }
 
         Long id = JwtUtil.getUserId(token, key);
-        log.info("id {}", id);
-
         List<Cart> carts = cartRepository.findAllByMember(Member.builder().id(id).build());
         List<GetCartListRes> cartList = new ArrayList<>();
 
         for (Cart cart : carts) {
             Product product = cart.getProduct();
-
-            cartList.add(GetCartListRes.builder()
-                    .idx(cart.getId())
-                    .productIdx(product.getId())
-                    .brandIdx(1)
-                    .amount(cart.getAmount())
-                    .name(product.getName())
-                    .price(product.getPrice())
-                    .salePrice(product.getSalePrice())
-                    .deliveryType(product.getDeliveryType())
-                    .isTodayDeal(product.getIsTodayDeal())
-                    .filename(product.getImageList().get(0).getImage())
-                    .build());
+            cartList.add(GetCartListRes.buildDto(cart, product));
         }
 
-        return SuccessListRes.builder()
-                .isSuccess(true)
-                .code(1000)
-                .message("요청 성공")
-                .result(cartList)
-                .success(true)
-                .build();
+        return SuccessListRes.buildDto(cartList);
     }
 
     // TODO: 장바구니에서 해당 상품 제거
