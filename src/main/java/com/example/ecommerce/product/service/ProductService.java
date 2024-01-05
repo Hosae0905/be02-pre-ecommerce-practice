@@ -95,7 +95,7 @@ public class ProductService {
             Product productInfo = product.get();
             String images = "";
             for (Image image : productInfo.getImageList()) {
-                images = image + ",";
+                images = image.getImage() + ",";
             }
             GetProductInfoRes getProductInfoRes = GetProductInfoRes.builder()
                     .idx(productInfo.getId())

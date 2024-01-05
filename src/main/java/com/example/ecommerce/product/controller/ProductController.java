@@ -37,9 +37,9 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.selectProduct(idx));
     }
 
-    @GetMapping("/display")
-    public void display(String fileName) {
-        log.info("fileName {}", fileName);
-    }
+//    @GetMapping("/display")
+//    public void display(String fileName) {
+//        log.info("fileName {}", fileName);
+//    }
 
 }

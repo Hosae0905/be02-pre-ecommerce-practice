@@ -24,7 +24,7 @@ public class FileSaveService {
 
     public String saveFile(MultipartFile file) {
         String originalName = file.getOriginalFilename();
-        String time = LocalDate.now().format(DateTimeFormatter.ofPattern("/yyyy/MM/dd"));
+        String time = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String folderPath = time.replace("/", File.separator);
         String uuid = UUID.randomUUID().toString();
         String savedFileName = folderPath + File.separator + uuid + "_" + originalName;
