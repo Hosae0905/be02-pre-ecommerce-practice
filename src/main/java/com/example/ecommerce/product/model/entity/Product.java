@@ -1,5 +1,6 @@
 package com.example.ecommerce.product.model.entity;
 
+import com.example.ecommerce.cart.model.entity.Cart;
 import com.example.ecommerce.product.model.request.PostProductReq;
 import lombok.*;
 
@@ -27,6 +28,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Image> imageList;
+
+    @OneToMany(mappedBy = "product")
+    private List<Cart> cartList;
 
     public static Product dtoToEntity(PostProductReq postProductReq) {
         return Product.builder()

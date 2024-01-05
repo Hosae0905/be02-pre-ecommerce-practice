@@ -1,5 +1,6 @@
 package com.example.ecommerce.util;
 
+import com.example.ecommerce.member.model.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,9 +10,10 @@ import java.security.Key;
 import java.util.Date;
 
 public class JwtUtil {
-    public static String generateAccessToken(String username, String key, int expiredTimeMs) {
+    public static String generateAccessToken(Member member, String key, int expiredTimeMs) {
         Claims claims = Jwts.claims();
-        claims.put("username", username);
+        claims.put("username", member.getUsername());
+        claims.put("id", member.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -40,6 +42,10 @@ public class JwtUtil {
 
     public static String getUsername(String token, String key) {
         return extractAllClaim(token, key).get("username", String.class);
+    }
+
+    public static Long getUserId(String token, String key) {
+        return extractAllClaim(token, key).get("id", Long.class);
     }
 
     public static Key getSignKey(String key) {

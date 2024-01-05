@@ -40,7 +40,7 @@ public class MemberService implements UserDetailsService {
             if(passwordEncoder.matches(postAuthenticateReq.getPassword(), member.get().getPassword())) {
 
                 Map<String, String> response = new HashMap<>();
-                response.put("token", JwtUtil.generateAccessToken(postAuthenticateReq.getUsername(), key, expiredTimeMs));
+                response.put("token", JwtUtil.generateAccessToken(member.get(), key, expiredTimeMs));
                 return response;
             } else {
                 return null;
@@ -63,7 +63,7 @@ public class MemberService implements UserDetailsService {
     public PostSignUpRes signUp(PostSignUpReq postSignUpReq) {
         postSignUpReq.setPassword(passwordEncoder.encode(postSignUpReq.getPassword()));
         Member member = memberRepository.save(Member.dtoToEntity(postSignUpReq));
-        String accessToken = JwtUtil.generateAccessToken(member.getUsername(), key, expiredTimeMs);
+        String accessToken = JwtUtil.generateAccessToken(member, key, expiredTimeMs);
 
         return PostSignUpRes.builder()
                 .id(member.getId())

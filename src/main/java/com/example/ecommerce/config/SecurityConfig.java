@@ -34,8 +34,9 @@ public class SecurityConfig {
                     .authorizeRequests()
                     .antMatchers("/member/*").permitAll()
                     .antMatchers("/product/*").permitAll()
+                    .antMatchers("/cart/**").permitAll()
+//                    .antMatchers("/cart/**").hasRole("USER")
                     .antMatchers("/product/create").hasRole("SELLER")
-                    .antMatchers("/product/display").hasRole("SELLER")
                     .anyRequest().authenticated();
             http.formLogin().disable();
             http.addFilterBefore(new JwtFilter(memberService, key), UsernamePasswordAuthenticationFilter.class);
