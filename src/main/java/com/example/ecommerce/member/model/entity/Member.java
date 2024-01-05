@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,10 +23,17 @@ public class Member implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    @Pattern(regexp = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}+$")
     private String email;
+    @Column(nullable = false, length = 20)
     private String nickname;
+    @Column(nullable = false, length = 30)
+//    @Pattern(regexp = "^(?=.*[a-zA-Z])((?=.*\\d)|(?=.*\\W)).{10,30}+$")
     private String password;
+    @Column(nullable = false)
     private String role;
+    @Column(nullable = false)
     private Boolean isValid;
 
     @OneToMany(mappedBy = "member")
