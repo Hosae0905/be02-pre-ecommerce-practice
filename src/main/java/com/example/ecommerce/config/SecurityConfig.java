@@ -35,6 +35,7 @@ public class SecurityConfig {
                     .antMatchers("/member/*").permitAll()
                     .antMatchers("/product/*").permitAll()
                     .antMatchers("/cart/**").permitAll()
+                    .antMatchers("/pay/**").permitAll()
 //                    .antMatchers("/cart/**").hasRole("USER")
                     .antMatchers("/product/create").hasRole("SELLER")
                     .anyRequest().authenticated();
