@@ -36,10 +36,4 @@ public class ProductController {
     public ResponseEntity<Object> select(@PathVariable Long idx) {
         return ResponseEntity.ok().body(productService.selectProduct(idx));
     }
-
-//    @GetMapping("/display")
-//    public void display(String fileName) {
-//        log.info("fileName {}", fileName);
-//    }
-
 }

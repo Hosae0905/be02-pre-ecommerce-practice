@@ -11,10 +11,12 @@ public class ApplicationException extends RuntimeException{
 
     private ErrorCode errorCode;
     private String message;
+    private Integer code;
 
     public ApplicationException(ErrorCode errorCode) {
         this.errorCode = errorCode;
         this.message = null;
+        this.code = null;
     }
 
     public String getMessage() {

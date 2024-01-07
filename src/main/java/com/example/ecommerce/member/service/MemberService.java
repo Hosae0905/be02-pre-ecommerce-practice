@@ -1,5 +1,7 @@
 package com.example.ecommerce.member.service;
 
+import com.example.ecommerce.exception.ApplicationException;
+import com.example.ecommerce.exception.ErrorCode;
 import com.example.ecommerce.member.model.request.PostAuthenticateReq;
 import com.example.ecommerce.member.model.request.PostSellerSignUpReq;
 import com.example.ecommerce.member.model.request.PostSignUpReq;
@@ -9,6 +11,7 @@ import com.example.ecommerce.member.model.response.SuccessSignUpRes;
 import com.example.ecommerce.member.repository.MemberRepository;
 import com.example.ecommerce.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +25,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -42,7 +46,7 @@ public class MemberService implements UserDetailsService {
                 response.put("token", JwtUtil.generateAccessToken(member.get(), key, expiredTimeMs));
                 return response;
             } else {
-                return null;
+                throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
             }
         } else {
             return null;
@@ -52,7 +56,7 @@ public class MemberService implements UserDetailsService {
     public Boolean checkEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
-            return false;
+            throw new ApplicationException(ErrorCode.DUPLICATE_USER);
         } else {
             return true;
         }
@@ -77,7 +81,11 @@ public class MemberService implements UserDetailsService {
     }
 
     public void sellerSignUp(PostSellerSignUpReq postSellerSignUpReq) {
-        memberRepository.save(Member.dtoToEntity(postSellerSignUpReq));
+        postSellerSignUpReq.setPassword(passwordEncoder.encode(postSellerSignUpReq.getPassword()));
+        Member member = memberRepository.save(Member.dtoToEntity(postSellerSignUpReq));
+        String accessToken = JwtUtil.generateAccessToken(member, key, expiredTimeMs);
+        PostSignUpRes postSignUpRes = PostSignUpRes.buildDto(member, accessToken);
+        sendEmail(postSignUpRes);
     }
 
     public void sendEmail(PostSignUpRes postSignUpRes) {
@@ -103,7 +111,7 @@ public class MemberService implements UserDetailsService {
         }
     }
 
-    public void updateValid(String email) {
+    private void updateValid(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             member.get().setIsValid(true);
