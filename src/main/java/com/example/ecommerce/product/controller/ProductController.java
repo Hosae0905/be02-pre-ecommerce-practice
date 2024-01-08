@@ -27,9 +27,14 @@ public class ProductController {
         return ResponseEntity.ok().body(success);
     }
 
+//    @RequestMapping(method = RequestMethod.GET, value = "/list")
+//    public ResponseEntity<Object> list() {
+//        return ResponseEntity.ok().body(productService.list());
+//    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/list")
-    public ResponseEntity<Object> list() {
-        return ResponseEntity.ok().body(productService.list());
+    public ResponseEntity<Object> list(Integer page, Integer size) {
+        return ResponseEntity.ok().body(productService.list(page, size));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{idx}")

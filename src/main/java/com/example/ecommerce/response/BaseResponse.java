@@ -12,4 +12,8 @@ public class BaseResponse<T> {
     private String message;
     private T result;
     private Boolean success;
+
+//    public T successResponse() {
+//
+//    }
 }
