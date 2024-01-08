@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
@@ -22,9 +24,9 @@ public class ProductController {
     public ResponseEntity<Object> create(
             @RequestPart PostProductReq postProductReq,
             @RequestPart MultipartFile[] uploadFiles) {
-        PostCreateRes postCreateRes = productService.create(postProductReq);
-        SuccessCreateRes success = productService.saveImage(uploadFiles, postCreateRes.getIdx());
-        return ResponseEntity.ok().body(success);
+        SuccessCreateRes successCreateRes = productService.create(postProductReq, uploadFiles);
+//        SuccessCreateRes success = productService.saveImage(uploadFiles, postCreateRes.getIdx());
+        return ResponseEntity.ok().body(successCreateRes);
     }
 
 //    @RequestMapping(method = RequestMethod.GET, value = "/list")

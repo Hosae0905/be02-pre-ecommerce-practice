@@ -28,7 +28,7 @@ public class Member implements UserDetails{
     private String email;
     @Column(nullable = false, length = 20)
     private String nickname;
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 100)
 //    @Pattern(regexp = "^(?=.*[a-zA-Z])((?=.*\\d)|(?=.*\\W)).{10,30}+$")
     private String password;
     @Column(nullable = false)

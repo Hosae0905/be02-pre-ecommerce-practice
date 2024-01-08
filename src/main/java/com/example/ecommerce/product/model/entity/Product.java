@@ -31,6 +31,8 @@ public class Product {
     private String isTodayDeal;
     @Column(nullable = false)
     private String contents;
+//    @Version
+//    private Integer likeCount;
 
     @OneToMany(mappedBy = "product")
     private List<Image> imageList;
@@ -49,4 +51,8 @@ public class Product {
                 .contents(postProductReq.getContents())
                 .build();
     }
+
+//    public void increaseLikeCount() {
+//        this.likeCount++;
+//    }
 }
