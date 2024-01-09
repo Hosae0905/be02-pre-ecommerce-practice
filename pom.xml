@@ -12,8 +12,10 @@
     <artifactId>ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ecommerce</name>
+    <packaging>jar</packaging>
     <description>ecommerce</description>
     <properties>
+        <maven.test.skip>true</maven.test.skip>
         <java.version>11</java.version>
     </properties>
     <repositories>

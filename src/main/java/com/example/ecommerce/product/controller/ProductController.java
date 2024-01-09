@@ -25,18 +25,17 @@ public class ProductController {
             @RequestPart PostProductReq postProductReq,
             @RequestPart MultipartFile[] uploadFiles) {
         SuccessCreateRes successCreateRes = productService.create(postProductReq, uploadFiles);
-//        SuccessCreateRes success = productService.saveImage(uploadFiles, postCreateRes.getIdx());
         return ResponseEntity.ok().body(successCreateRes);
     }
 
 //    @RequestMapping(method = RequestMethod.GET, value = "/list")
-//    public ResponseEntity<Object> list() {
-//        return ResponseEntity.ok().body(productService.list());
+//    public ResponseEntity<Object> list(Integer page, Integer size) {
+//        return ResponseEntity.ok().body(productService.list(page, size));
 //    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list")
-    public ResponseEntity<Object> list(Integer page, Integer size) {
-        return ResponseEntity.ok().body(productService.list(page, size));
+    public ResponseEntity<Object> list() {
+        return ResponseEntity.ok().body(productService.list());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{idx}")

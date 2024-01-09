@@ -41,28 +41,9 @@ public class ProductService {
         return SuccessCreateRes.successDto(postCreateRes.getIdx());
     }
 
-//    public SuccessCreateRes saveImage(MultipartFile[] uploadFiles, Long idx) {
-//        List<Image> images = new ArrayList<>();
-//        for (MultipartFile uploadFile : uploadFiles) {
-//            String saveFile = fileSaveService.saveFile(uploadFile);
-//            Image image = imageRepository.save(Image.buildEntity(saveFile, idx));
-//            images.add(image);
-//        }
-//
-//        Optional<Product> product = productRepository.findById(idx);
-//
-//        if (product.isPresent()) {
-//            product.get().setImageList(images);
-//            productRepository.save(product.get());
-//        }
-//
-//        return SuccessCreateRes.successDto(idx);
-//    }
-
     @Transactional(readOnly = true)
     public SuccessListRes list() {
-//        List<Product> products = productRepository.findAll();     // N + 1 문제 발생
-        List<Product> products = productRepository.findAllQuery();  // jqpl로 N + 1 문제 해결
+        List<Product> products = productRepository.findAllQuery();
         List<GetProductListRes> productList = new ArrayList<>();
 
         if (products != null) {
@@ -76,29 +57,11 @@ public class ProductService {
         }
     }
 
-    // Pageable 처리
+    // Querydsl 처리
+//    @Transactional(readOnly = true)
 //    public SuccessListRes list(Integer page, Integer size) {
-//        List<Product> products = productRepository.findAllQuery();  // jqpl로 N + 1 문제 해결
-//
 //        Pageable pageable = PageRequest.of(page - 1, size);
-//        Page<Product> result = productRepository.findAll(pageable);
-//
-//        List<GetProductListRes> productList = new ArrayList<>();
-//
-//        if (products != null) {
-//            for (Product product : result.getContent()) {
-//                productList.add(GetProductListRes.entityToDto(product));
-//            }
-//
-//            return SuccessListRes.successDto(productList);
-//        } else {
-//            return null;
-//        }
-//    }
-
-    // JPQL로 처리
-//    public SuccessListRes list(Integer page, Integer size) {
-//        List<Product> products = productRepository.findAllQueryWithPage(page, size);  // jqpl로 N + 1 문제 해결
+//        Page<Product> products = productRepository.findList(pageable);
 //
 //        List<GetProductListRes> productList = new ArrayList<>();
 //
@@ -112,26 +75,6 @@ public class ProductService {
 //            return null;
 //        }
 //    }
-
-    // Querydsl 처리
-    @Transactional(readOnly = true)
-    public SuccessListRes list(Integer page, Integer size) {
-//        List<Product> products = productRepository.findAllQueryWithPage(page, size);  // jqpl로 N + 1 문제 해결
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Product> products = productRepository.findList(pageable);
-
-        List<GetProductListRes> productList = new ArrayList<>();
-
-        if (products != null) {
-            for (Product product : products) {
-                productList.add(GetProductListRes.entityToDto(product));
-            }
-
-            return SuccessListRes.successDto(productList);
-        } else {
-            return null;
-        }
-    }
 
     public SuccessSelectRes selectProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);

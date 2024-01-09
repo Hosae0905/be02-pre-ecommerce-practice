@@ -20,7 +20,7 @@ public class SuccessListRes {
         return SuccessListRes.builder()
                 .isSuccess(true)
                 .code(1000)
-                .message("요청 성공")
+                .message("요청 성공33333333333333333333333")
                 .result(productList)
                 .success(true)
                 .build();
